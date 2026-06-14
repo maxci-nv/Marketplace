@@ -1,0 +1,3 @@
+/backend/src/**/.vs/
+/backend/src/**/bin/
+/backend/src/**/obj/

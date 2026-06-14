@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/Marketplace.Common/">
+    <Project Path="Marketplace.Common/Marketplace.Common.Hosting/Marketplace.Common.Hosting.csproj" />
+  </Folder>
+  <Folder Name="/Marketplace.User/">
+    <Project Path="Marketplace.User.Application/Marketplace.User.Application.csproj" Id="28d0c8db-0683-4cdb-9ee8-f5b0f3c31205" />
+    <Project Path="Marketplace.User/Marketplace.User.Api/Marketplace.User.Api.csproj" />
+  </Folder>
+</Solution>
