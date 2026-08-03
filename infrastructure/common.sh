@@ -138,7 +138,6 @@ ask_password() {
     while true; do
 
         read -rsp "$prompt: " password
-        echo
 
         [[ -n "$password" ]] && {
             echo "$password"
@@ -271,6 +270,63 @@ check_docker_running() {
 check_compose() {
 
     docker compose version >/dev/null 2>&1
+}
+
+container_exists() {
+
+    docker ps -a --format '{{.Names}}' | grep -Fxq "$1"
+}
+
+wait_container_running() {
+
+    local container="$1"
+
+    for _ in {1..30}; do
+
+        if docker inspect \
+            --format '{{.State.Running}}' \
+            "$container" 2>/dev/null | grep -q true
+        then
+            return
+        fi
+
+        sleep 2
+
+    done
+
+    error "Container '$container' failed to start."
+}
+
+wait_container_healthy() {
+
+    local container="$1"
+
+    for _ in {1..60}; do
+
+        status=$(docker inspect \
+            --format '{{if .State.Health}}{{.State.Health.Status}}{{end}}' \
+            "$container" 2>/dev/null)
+
+        case "$status" in
+
+            healthy)
+                return
+                ;;
+
+            unhealthy)
+                docker logs "$container"
+                error "Container '$container' is unhealthy."
+                ;;
+
+        esac
+
+        sleep 2
+
+    done
+
+    docker logs "$container"
+
+    error "Container '$container' did not become healthy."
 }
 
 ########################################

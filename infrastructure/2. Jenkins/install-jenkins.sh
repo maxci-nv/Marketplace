@@ -23,7 +23,7 @@ info "Checking docker"
 check_docker
 
 info "Checking old jenkins"
-if docker ps --format '{{.Names}}' | grep -q "^jenkins$"; then
+if container_exists "jenkins"; then
     warning "Jenkins container is already running"
 
     ask_yes_no "Continue anyway?" || exit 0
@@ -54,7 +54,7 @@ step "Generating configuration"
 if [[ -f "${JENKINS_DIR}/docker-compose.yml" ]]; then
     warning "Existing Jenkins installation detected in ${JENKINS_DIR}"
 
-    ask_yes_no "Overwrite existing configuration?" || exit 0
+    ask_yes_no "Overwrite configuration?" || exit 0
 fi
 
 info "Creating ${JENKINS_DIR}"
